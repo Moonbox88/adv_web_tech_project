@@ -1,15 +1,76 @@
 {% extends "layout.html" %}
 
 {% block content %}
-	<main class="hero-section">
-		<div class="container">
-			
-			<h1>Home</h1>
 
-			<div class="section-content">
-				<h2>The special place.</h2>
-				<a href="{{ url_for('logout') }}" class="btn-secondary">Log out</a>
+<div class="navbar">
+  <form method="POST" action="/home">
+  {% for cat in categories %}
+    <div class="dropdown">
+      <button class="dropbtn">{{ cat[0]['category'] }}
+        <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content">
+        {% for sub in cat %}
+        {% if loop.index > 1 %}
+        <a href="?category={{ sub['subcat'] }}">{{ sub['subcat'] }}</a>
+        {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+    </form>
+  </div>
 
-		</div>
-	</main>
-{%endblock %}
+<main>
+  <header class="row tm-welcome-section">
+  <div>
+    <form method="POST" action="/home/">
+      <section class="container">
+        <div class="dropdown">
+          <select id="cat-select" name="categories" class="dropdown-select">
+            <option value="placeholder">--Select--</option>
+            {% for cat in categories %}
+            <option value="{{ cat[0]['cat_id'] }}">{{ cat[0]['category'] }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+      </section>
+      {{ form.hidden_tag() }}
+
+      <div class="form-group">
+        {{ form.query.label }}
+
+        {% if form.query.errors %}
+          {% for error in form.query.errors %}
+            <p class="error-message">{{ error }}</p>
+          {% endfor %}
+        {% endif %}
+
+        {{ form.query }}
+      </div>
+
+      {{ form.submit(class="tm-btn-primary") }}
+    </form>
+  </div>
+  </header>
+
+  <!-- Gallery -->
+  <div class="row tm-gallery">
+    <div id="tm-gallery-page-products" class="tm-gallery-page">
+			{% for item in products %}
+      <article class="col-lg-3 col-md-4 col-sm-6 col-12 tm-gallery-item">
+        <figure>
+          <img src="{{ item['image'] }}" alt="Image" class="img-fluid tm-gallery-img" />
+          <figcaption>
+            <h4 class="tm-gallery-title">{{ item['name'] }}</h4>
+            <p class="tm-gallery-description">{{ item['description'] }}</p>
+            <p class="tm-gallery-price">£{{ item['price'] }}</p>
+          </figcaption>
+        </figure>
+      </article>
+			{% endfor %}
+    </div>
+  </div>
+
+{% endblock %}

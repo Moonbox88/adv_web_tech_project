@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<main>
+	<header class="row tm-welcome-section">
+		<h2 class="col-12 text-center tm-section-title">Contact Page</h2>
+		<p class="col-12 text-center">You may use <a rel="nofollow" href="https://www.ltcclock.com/downloads/simple-contact-form/" target="_blank">Simple Contact Form</a> to send email to your inbox. You can modify and use this template for your website. Header image has a parallax effect. Total 3 HTML pages included in this template.</p>
+	</header>
+
+	<div class="tm-container-inner-2 tm-contact-section">
+		<div class="row">
+			<div class="col-md-6">
+        {% for place in places %}
+          <article>
+            <a class="name" href="{{ place['url'] }}" target="_blank">{{ place['name'] }}</a>
+            <p class="walking-distance">{{ place['time'] }} min away</p>
+          </article>
+        {% endfor %}
+			</div>
+			<div class="col-md-6">
+				<div class="tm-address-box">
+          <form method="POST" action="/map">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+              {% if form.address.errors %}
+                {% for error in form.address.errors %}
+                  <p class="error-message">{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+
+              {{ form.address(placeholder="Explore nearby") }}
+            </div>
+
+            {{ form.submit(class="tm-btn-primary") }}
+          </form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+<!-- How to change your own map point
+1. Go to Google Maps
+2. Click on your location point
+3. Click "Share" and choose "Embed map" tab
+4. Copy only URL and paste it within the src="" field below
+-->
+	<div class="tm-container-inner-2 tm-map-section">
+		<div class="row">
+			<div class="col-12">
+				<div id="map">
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tm-container-inner-2 tm-info-section">
+		<div class="row">
+
+		</div>
+	</div>
+
+    <div class="clearfix">
+    </div>
+
+<script>
+  var planes = [
+    {% for place in places %}
+      ["<h3><a href='{{ place['url'] }}' target='_blank'>{{ place['name'] }}</a></h3> <p>{{ place['time'] }} min away</p>", {{ place['lat'] }}, {{ place['lng'] }} ],
+    {% endfor %}
+  ];
+  var map = L.map('map').setView([{{ my_coordinates[0] }}, {{ my_coordinates[1] }}], 13);
+  L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+  attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+  maxZoom: 18,
+  id: 'mapbox.streets',
+  accessToken: 'pk.eyJ1IjoibW9vbmJveCIsImEiOiJjanlwMGhvM3oxNmhwM2NubzBxdzA2NTN3In0.-AiQq8qbtZ5LUBgyF-Exrw'
+  }).addTo(map);
+  var circle = L.circle([{{ my_coordinates[0] }}, {{ my_coordinates[1] }}], {
+  color: 'red',
+  fillColor: '#f03',
+  fillOpacity: 0.5,
+  radius: 400
+  }).addTo(map);
+    circle.bindPopup("You are here, kind of.");
+  for (var i = 0; i < planes.length; i++) {
+    marker = new L.marker([planes[i][1],planes[i][2]])
+      .bindPopup(planes[i][0])
+      .addTo(map);
+  }
+	var popup = L.popup();
+	function onMapClick(e) {
+	    popup
+	        .setLatLng(e.latlng)
+	        .setContent("You clicked the map at " + e.latlng.toString())
+	        .openOn(map);
+	}
+	map.on('click', onMapClick);
+</script>
+
+{% endblock %}

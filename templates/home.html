@@ -6,7 +6,7 @@
   <form method="POST" action="/home">
   {% for cat in categories %}
     <div class="dropdown">
-      <button class="dropbtn">{{ cat[0]['category'] }}
+      <button class="dropbtn" formaction="?category={{ cat[0]['category'] }}">{{ cat[0]['category'] }}
         <i class="fa fa-caret-down"></i>
       </button>
       <div class="dropdown-content">
@@ -22,55 +22,77 @@
   </div>
 
 <main>
-  <header class="row tm-welcome-section">
-  <div>
-    <form method="POST" action="/home/">
-      <section class="container">
-        <div class="dropdown">
-          <select id="cat-select" name="categories" class="dropdown-select">
-            <option value="placeholder">--Select--</option>
-            {% for cat in categories %}
-            <option value="{{ cat[0]['cat_id'] }}">{{ cat[0]['category'] }}</option>
-            {% endfor %}
-          </select>
+  <div class="s003">
+      <form method="POST" action="/home/">
+        <div class="inner-form">
+          <div class="input-field first-wrap">
+            <div class="input-select">
+              <select id="cat-select" data-trigger="" name="choices-single-defaul">
+                <option value="placeholder">-- Select --</option>
+                {% for cat in categories %}
+                <option value="{{ cat[0]['cat_id'] }}">{{ cat[0]['category'] }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="input-field second-wrap">
+            {{ form.hidden_tag() }}
+
+            {{ form.query.label }}
+
+            {% if form.query.errors %}
+              {% for error in form.query.errors %}
+                <p class="error-message">{{ error }}</p>
+              {% endfor %}
+            {% endif %}
+
+            {{ form.query }}
+          </div>
+          <div class="input-field third-wrap">
+            {{ form.submit(class_="btn-search") }}
+          </div>
         </div>
+      </form>
+    </div>
+  <script src="/static/js/extention/choices.js"></script>
+  <script>
+    const choices = new Choices('[data-trigger]',
+    {
+      searchEnabled: false,
+      itemSelectText: '',
+    });
 
-      </section>
-      {{ form.hidden_tag() }}
-
-      <div class="form-group">
-        {{ form.query.label }}
-
-        {% if form.query.errors %}
-          {% for error in form.query.errors %}
-            <p class="error-message">{{ error }}</p>
-          {% endfor %}
-        {% endif %}
-
-        {{ form.query }}
-      </div>
-
-      {{ form.submit(class="tm-btn-primary") }}
-    </form>
-  </div>
-  </header>
+  </script>
 
   <!-- Gallery -->
   <div class="row tm-gallery">
     <div id="tm-gallery-page-products" class="tm-gallery-page">
 			{% for item in products %}
       <article class="col-lg-3 col-md-4 col-sm-6 col-12 tm-gallery-item">
+        <a href="{{ url_for('product_view',id=item['id']) }}">
         <figure>
-          <img src="{{ item['image'] }}" alt="Image" class="img-fluid tm-gallery-img" />
+          <img src="{{ item['image'] }}" alt="Image" class="img-fluid tm-gallery-img">
           <figcaption>
             <h4 class="tm-gallery-title">{{ item['name'] }}</h4>
             <p class="tm-gallery-description">{{ item['description'] }}</p>
             <p class="tm-gallery-price">£{{ item['price'] }}</p>
           </figcaption>
         </figure>
+        </a>
       </article>
 			{% endfor %}
     </div>
+    {% if pages is defined %}
+    <div class="w3-bar">
+      <a href="#" class="w3-button">&laquo;</a>
+      {% for i in range(pages['productPages']) %}
+      <a href="#" class="w3-button">{{ i }}</a>
+      {% endfor %}
+      <a href="#" class="w3-button">&raquo;</a>
+    </div>
+    {% endif %}
   </div>
+
+
 
 {% endblock %}

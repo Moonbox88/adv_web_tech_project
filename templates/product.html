@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h2>{{ product_info['name'] }}</h2>
+<img src="{{ product_info['image']['sizes'][1]['url'] }}" alt="Product Image" class="img-fluid tm-gallery-img">
+<p>{{ product_info['options'][0]['priceString'] }}</p>
+<p>{{ product_info['description'] }}</p>
+
+{% endblock %}

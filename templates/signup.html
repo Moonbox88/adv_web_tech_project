@@ -1,14 +1,18 @@
 {% extends "layout.html" %}
 
 {% block content %}
-	<main class="container signup-section">
-		<div class="section-content">
-			<h2>Create an account</h2>
+	<main class="signup-section">
+		<div class="login">
+		<div class="login-screen">
+		<div class="app-title"
+			<h1>Create an account</h1>
+		</div>
+			<div class="login-form">
 
 			<form method="POST" action="/signup">
 				{{ form.hidden_tag() }}
 
-				<div class="form-group">
+				<div class="control-group">
 					{{ form.first_name.label }}
 
 					{% if form.first_name.errors %}
@@ -17,10 +21,10 @@
 						{% endfor %}
 					{% endif %}
 
-					{{ form.first_name }}
+					{{ form.first_name(class_="login-input") }}
 				</div>
 
-				<div class="form-group">
+				<div class="control-group">
 					{{ form.last_name.label }}
 
 					{% if form.last_name.errors %}
@@ -29,10 +33,10 @@
 						{% endfor %}
 					{% endif %}
 
-					{{ form.last_name }}
+					{{ form.last_name(class_="login-input") }}
 				</div>
 
-				<div class="form-group">
+				<div class="control-group">
 					{{ form.email.label }}
 
 					{% if form.email.errors %}
@@ -41,10 +45,10 @@
 						{% endfor %}
 					{% endif %}
 
-					{{ form.email }}
+					{{ form.email(class_="login-input") }}
 				</div>
 
-				<div class="form-group">
+				<div class="control-group">
 					{{ form.password.label }}
 
 					{% if form.password.errors %}
@@ -53,11 +57,13 @@
 						{% endfor %}
 					{% endif %}
 
-					{{ form.password }}
+					{{ form.password(class_="login-input") }}
 				</div>
 
-				{{ form.submit(class="btn-primary") }}
+				{{ form.submit(class_="signup-btn") }}
 			</form>
+		</div>
+		</div>
 		</div>
 	</main>
 {% endblock %}

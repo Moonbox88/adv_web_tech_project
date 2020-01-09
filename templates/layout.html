@@ -2,25 +2,27 @@
 <html>
 
 <head>
+	<title>Hurry Up And Buy!</title>
 	<meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" />
-    <title>Hurry Up And Buy!</title>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400" rel="stylesheet"/>
-		<link href="/static/css/templatemo-style.css" rel="stylesheet"/>
-		<link href="/static/css/all.min.css" rel="stylesheet"/>
-		<link href="/static/css/custom.css" rel="stylesheet"/>
-	  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
-      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-      crossorigin=""/>
-  	<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
-      integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
-      crossorigin="">
-  	</script>
-		<script src="/static/js/main.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" />
+	<link href="/static/css/templatemo-style.css" rel="stylesheet"/>
+	<link href="/static/css/all.min.css" rel="stylesheet"/>
+	<link href="/static/css/custom.css" rel="stylesheet"/>
+	<link href="/static/css/searchbar.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin=""/>
+	<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+    integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+    crossorigin="">
+	</script>
+	<script src="/static/js/main.js"></script>
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 </head>
 <!--
 Simple House
@@ -37,26 +39,25 @@ https://templatemo.com/tm-539-simple-house
 					<div class="row tm-header-inner">
 						<div class="col-md-6 col-12">
 							{% if not 'email' in session %}
-							<a href="/"><img src="/static/img/vmask.jpg" alt="Logo" class="tm-site-logo"></a>{% endif %}
+							<a href="/"><img src="/static/img/huab.png" alt="Logo" class="tm-site-logo"></a>{% endif %}
 							{% if 'email' in session %}
-							<a href="/home"><img src="/static/img/vmask.jpg" alt="Logo" class="tm-site-logo"></a>{% endif %}
+							<a href="/home"><img src="/static/img/huab.png" alt="Logo" class="tm-site-logo"></a>{% endif %}
 							<div class="tm-site-text-box">
-								<h1 class="tm-site-title">HURRY UP AND BUY</h1>
 								<h6 class="tm-site-description">powered by SHOP.com</h6>
 							</div>
 						</div>
-						<nav class="col-md-6 col-12 tm-nav">
-							<ul class="tm-nav-ul">
-                {% if not 'email' in session %}
-								<li class="tm-nav-li"><a href="/login" class="tm-nav-link">Log-In</a></li>
-								<li class="tm-nav-li"><a href="/signup" class="tm-nav-link">Sign-Up</a></li>
-                {% endif %}
-                {% if 'email' in session %}
-								<li class="tm-nav-li"><a href="#" class="tm-nav-link">Account</a></li>
-								<li class="tm-nav-li"><a href="/logout" class="tm-nav-link">Log-Out</a></li>
-                {% endif %}
-							</ul>
-						</nav>
+						<div class="account-box">
+							<div class="btn-box">
+								{% if not 'email' in session %}
+							  <a href="/login" class="account-btn account-btn-white account-btn-animation-1">Log In</a>
+								<a href="/signup" class="account-btn account-btn-white account-btn-animation-1">Sign Up</a>
+								{% endif %}
+								{% if 'email' in session %}
+								<a href="#" class="account-btn account-btn-white account-btn-animation-1">Account</a>
+								<a href="/logout" class="account-btn account-btn-white account-btn-animation-1">Log Out</a>
+								{% endif %}
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -70,13 +71,13 @@ https://templatemo.com/tm-539-simple-house
 		<div class="row">
 			<div class="col-md-6">
 				<figure class="tm-description-figure">
-					<img src="/static/img/img-01.jpg" alt="Image" class="img-fluid" />
+					<img src="/static/img/fast-shopper.jpeg" alt="Image" class="img-fluid" />
 				</figure>
 			</div>
 			<div class="col-md-6">
 				<div class="tm-description-box">
-					<h4 class="tm-gallery-title"><a href="/about">About</a></h4>
-					<p class="tm-mb-45">Odio pellentesque diam volutpat commodo sed egestas egestas. Integer feugiat scelerisque varius morbi enim nunc faucibus. Eget egestas purus viverra accumsan in. Vitae sapien pellentesque habitant morbi tristique senectus et netus et. Fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate sapien nec.</p>
+					<p class="tm-mb-45">We want your shopping experience to be as fast and enjoyable, if not more so, than this chap in a rocket propelled trolley. Let us tell you more about us by clicking <a href="/about">HERE</a>.</p>
+					<p>To find points of interest near you click <a href="/map">HERE</a>.</p>
 				</div>
 			</div>
 		</div>

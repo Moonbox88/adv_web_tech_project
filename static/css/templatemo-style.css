@@ -264,6 +264,9 @@ p, address {
 .tm-site-logo {
   display: inline-block;
   margin-right: 5px;
+  max-height: 150px;
+  max-width: 450px;
+  box-shadow: 0 0 0 4px black, 0 0 0 10px white;
 }
 
 .tm-site-text-box {
@@ -275,9 +278,6 @@ p, address {
   font-weight: 700;
   margin-bottom: 5px;
   color: red;
-  background: #FFFFFF;
-  border-radius: 3px;
-  padding: 3px 5px;
 }
 
 .tm-site-description {

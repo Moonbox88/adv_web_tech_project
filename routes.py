@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, url_for
-from models import db, User, Place, Products, Categories
+from models import db, User, Place, Products, Categories, Product_details
 from forms import SignupForm, LoginForm, AddressForm, SearchForm
 from logging.handlers import RotatingFileHandler
 import urllib.request
@@ -156,18 +156,18 @@ def home():
             for each in cat:
                 if count == 0:
                     if category == each['category']:
-                        print("CAT: ", each)
+                        products = p.search_query("", each['cat_id'])
+                        pages = products.pop(-1)
+                        app.logger.info("Logging a test message from {}".format(this_route))
+                        return render_template('home.html', form=form, products=products, categories=categories, pages=pages)
                 else:
                     if category == each['subcat']:
                         products = p.search_query("", each['sub_id'])
-
+                        pages = products.pop(-1)
                         app.logger.info("Logging a test message from {}".format(this_route))
-                        return render_template('home.html', form=form, products=products, categories=categories)
-
+                        return render_template('home.html', form=form, products=products, categories=categories, pages=pages)
                 count += 1
             count = 0
-
-
 
     if request.method == "POST":
         if form.validate() == False:
@@ -176,19 +176,35 @@ def home():
         else:
             query = form.query.data
 
-            cat_id = request.form.get("categories")
+            cat_id = request.form.get("choices-single-defaul")
 
             products = p.search_query(query, cat_id)
             #categories = c.return_categories()
 
+            pages = products.pop(-1)
+
             app.logger.info("Logging a test message from {}".format(this_route))
-            return render_template('home.html', form=form, products=products, categories=categories)
+            return render_template('home.html', form=form, products=products, categories=categories, pages=pages)
 
     elif request.method == 'GET':
         app.logger.info("Logging a test message from {}".format(this_route))
         return render_template('home.html', form=form, categories=categories)
 
+@app.route("/product")
+def product_view():
+    this_route = url_for('.product_view')
+    if 'email' not in session:
+        app.logger.info("Logging a test message from {}".format(this_route))
+        return redirect(url_for('login'))
 
+    p = Product_details()
+
+    id = request.args.get('id', '')
+
+    product_details = p.return_product(id)
+
+
+    return render_template('product.html', product_info=product_details)
 
 @app.errorhandler(404)
 def page_not_found(error):

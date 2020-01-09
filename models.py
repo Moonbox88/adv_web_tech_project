@@ -4,6 +4,7 @@ import geocoder
 import urllib.request, urllib.parse
 import requests
 import json
+import math
 
 
 db = SQLAlchemy()
@@ -69,7 +70,6 @@ class Place(object):
             'lat': lat,
             'lng': lng
             }
-
             places.append(d)
 
         return places
@@ -127,8 +127,7 @@ class Products(object):
         else:
             cat_id = "&categoryId=" + cat_id
 
-        print(search_term)
-        url = 'https://api2.shop.com/AffiliatePublisherNetwork/v2/products?publisherId=5c3624328adc4b7b96f64d06c59daa91&locale=en_GB&site=shop&shipCountry=US&term={0}&start=0&perPage=30{1}&onlyMaProducts=false'.format(search_term, cat_id)
+        url = 'https://api2.shop.com/AffiliatePublisherNetwork/v2/products?publisherId=5c3624328adc4b7b96f64d06c59daa91&locale=en_GB&site=shop&shipCountry=GB&term={0}&start=0&perPage=48{1}&onlyMaProducts=false'.format(search_term, cat_id)
 
         hdr = {'accept': 'application/json', 'api_Key':'5c3624328adc4b7b96f64d06c59daa91'
         }
@@ -138,21 +137,44 @@ class Products(object):
 
         data = json.loads(response)
 
+        product_count = data['numberOfProducts']
+        pages = {'productPages' : math.ceil(product_count / 48)}
+
         products = []
         for item in data['products']:
             name = item['image']['caption']
-            image_sizes = item['image']['sizes']
-            image = image_sizes[1]['url']
+            image = item['image']['sizes'][1]['url']
             price = item['maximumPrice']
             desc = item['shortDescription']
+            id = item['id']
 
             d = {
             'name': name,
             'image': image,
             'price': price,
-            'description': desc
+            'description': desc,
+            'id': id
             }
-
             products.append(d)
 
+        products.append(pages)
+
         return products
+
+class Product_details(object):
+    def return_product(self, product_id):
+
+        url = 'https://api2.shop.com/AffiliatePublisherNetwork/v2/products/{0}?publisherId=5c3624328adc4b7b96f64d06c59daa91&locale=en_GB&site=shop&shipCountry=GB'.format(product_id)
+
+        hdr = {'accept': 'application/json', 'api_Key':'5c3624328adc4b7b96f64d06c59daa91'
+        }
+
+        req = urllib.request.Request(url,None,hdr)
+        response = urllib.request.urlopen(req).read().decode('utf8')
+
+        data = json.loads(response)
+
+        for each in data:
+            print(each)
+
+        return data

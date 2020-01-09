@@ -12,7 +12,7 @@ class SignupForm(FlaskForm):
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired("Email address is not recognised."), Email("Please enter a valid email address.")])
     password = PasswordField('Password', validators=[DataRequired("Please enter a password.")])
-    submit = SubmitField("Sign in")
+    submit = SubmitField("Log In")
 
 class AddressForm(FlaskForm):
     address = StringField('Address', validators=[DataRequired("Please enter an address.")])

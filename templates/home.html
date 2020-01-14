@@ -64,6 +64,20 @@
 
   </script>
 
+  {% if pages is defined %}
+  <div class="pagination-box">
+    <form action="/home">
+      <ul class="pagination">
+        <li><a href="#">&laquo;</a></li>
+        {% for i in range(pages['productPages']) %}
+        <li><a href="?query={{ query }}&page={{ i }}&catid={{ cat_id }}">{{ i }}</a></li>
+        {% endfor %}
+        <li><a href="#">&raquo;</a></li>
+      </ul>
+    </form>
+  </div>
+  {% endif %}
+
   <!-- Gallery -->
   <div class="row tm-gallery">
     <div id="tm-gallery-page-products" class="tm-gallery-page">
@@ -82,13 +96,18 @@
       </article>
 			{% endfor %}
     </div>
+    
     {% if pages is defined %}
-    <div class="w3-bar">
-      <a href="#" class="w3-button">&laquo;</a>
-      {% for i in range(pages['productPages']) %}
-      <a href="#" class="w3-button">{{ i }}</a>
-      {% endfor %}
-      <a href="#" class="w3-button">&raquo;</a>
+    <div class="pagination-box">
+      <form action="/home">
+        <ul class="pagination">
+          <li><a href="#">&laquo;</a></li>
+          {% for i in range(pages['productPages']) %}
+          <li><a href="?query={{ query }}&page={{ i }}&catid={{ cat_id }}">{{ i }}</a></li>
+          {% endfor %}
+          <li><a href="#">&raquo;</a></li>
+        </ul>
+      </form>
     </div>
     {% endif %}
   </div>

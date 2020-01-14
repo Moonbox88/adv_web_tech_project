@@ -146,28 +146,39 @@ def home():
     categories = c.return_categories()
 
     p = Products()
-    #c = Categories()
 
+    pagination = request.args.get('query')
     category = request.args.get('category')
-    if category != None:
-        #products = p.search_query("", )
-        count = 0
-        for cat in categories:
-            for each in cat:
-                if count == 0:
-                    if category == each['category']:
-                        products = p.search_query("", each['cat_id'])
-                        pages = products.pop(-1)
-                        app.logger.info("Logging a test message from {}".format(this_route))
-                        return render_template('home.html', form=form, products=products, categories=categories, pages=pages)
-                else:
-                    if category == each['subcat']:
-                        products = p.search_query("", each['sub_id'])
-                        pages = products.pop(-1)
-                        app.logger.info("Logging a test message from {}".format(this_route))
-                        return render_template('home.html', form=form, products=products, categories=categories, pages=pages)
-                count += 1
+
+    if pagination != None:
+
+        page = request.args.get('page')
+        catid = request.args.get('catid')
+
+        products = p.search_query(pagination, catid, page)
+        pages = products.pop(-1)
+
+        app.logger.info("Logging a test message from {}".format(this_route))
+        return render_template('home.html', form=form, products=products, categories=categories, pages=pages, query=pagination, cat_id=catid)
+    elif category != None:
+            #products = p.search_query("", )
             count = 0
+            for cat in categories:
+                for each in cat:
+                    if count == 0:
+                        if category == each['category']:
+                            products = p.search_query("", each['cat_id'], 0)
+                            pages = products.pop(-1)
+                            app.logger.info("Logging a test message from {}category_select({})".format(this_route, category))
+                            return render_template('home.html', form=form, products=products, categories=categories, pages=pages, cat_id=each['cat_id'])
+                    else:
+                        if category == each['subcat']:
+                            products = p.search_query("", each['sub_id'], 0)
+                            pages = products.pop(-1)
+                            app.logger.info("Logging a test message from {}category_select({})".format(this_route, category))
+                            return render_template('home.html', form=form, products=products, categories=categories, pages=pages, cat_id=each['sub_id'])
+                    count += 1
+                count = 0
 
     if request.method == "POST":
         if form.validate() == False:
@@ -178,13 +189,13 @@ def home():
 
             cat_id = request.form.get("choices-single-defaul")
 
-            products = p.search_query(query, cat_id)
+            products = p.search_query(query, cat_id, 0)
             #categories = c.return_categories()
 
             pages = products.pop(-1)
 
-            app.logger.info("Logging a test message from {}".format(this_route))
-            return render_template('home.html', form=form, products=products, categories=categories, pages=pages)
+            app.logger.info("Logging a test message from {}product_search({})".format(this_route, query))
+            return render_template('home.html', form=form, products=products, categories=categories, pages=pages, query=query, cat_id=cat_id)
 
     elif request.method == 'GET':
         app.logger.info("Logging a test message from {}".format(this_route))
@@ -197,6 +208,11 @@ def product_view():
         app.logger.info("Logging a test message from {}".format(this_route))
         return redirect(url_for('login'))
 
+    form = SearchForm()
+
+    c = Categories()
+    categories = c.return_categories()
+
     p = Product_details()
 
     id = request.args.get('id', '')
@@ -204,7 +220,7 @@ def product_view():
     product_details = p.return_product(id)
 
 
-    return render_template('product.html', product_info=product_details)
+    return render_template('product.html', product_info=product_details, form=form, categories=categories)
 
 @app.errorhandler(404)
 def page_not_found(error):

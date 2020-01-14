@@ -45,7 +45,7 @@ class Place(object):
 
     def query(self, address):
         lat, lng = self.address_to_latlng(address)
-        query_url = 'https://en.wikipedia.org/w/api.php?action=query&list=geosearch&gsradius=5000&gscoord={0}%7C{1}&gslimit=20&format=json'.format(lat, lng)
+        query_url = 'https://en.wikipedia.org/w/api.php?action=query&list=geosearch&gsradius=10000&gscoord={0}%7C{1}&gslimit=20&format=json'.format(lat, lng)
         g = urllib.request.urlopen(query_url)
         results = g.read()
         g.close()
@@ -120,16 +120,22 @@ class Categories(object):
         return categories
 
 class Products(object):
-    def search_query(self, query, cat_id):
+    def search_query(self, query, cat_id, page_num):
         search_term = urllib.parse.quote(query)
         if cat_id == "placeholder":
             cat_id = ""
         else:
             cat_id = "&categoryId=" + cat_id
 
-        url = 'https://api2.shop.com/AffiliatePublisherNetwork/v2/products?publisherId=5c3624328adc4b7b96f64d06c59daa91&locale=en_GB&site=shop&shipCountry=GB&term={0}&start=0&perPage=48{1}&onlyMaProducts=false'.format(search_term, cat_id)
+        if int(page_num) > 0:
+            page_num = int(page_num) * 48
+            if page_num > 5000:
+                page_num = 5000
+            str(page_num)
 
-        hdr = {'accept': 'application/json', 'api_Key':'5c3624328adc4b7b96f64d06c59daa91'
+        url = 'https://api2.shop.com/AffiliatePublisherNetwork/v2/products?publisherId=5c3624328adc4b7b96f64d06c59daa91&locale=en_GB&site=shop&shipCountry=GB&term={0}&start={1}&perPage=48{2}&onlyMaProducts=false'.format(search_term, page_num, cat_id)
+
+        hdr = {'accept': 'application/json', 'api_Key':'5c3624328adc4b7b96f64d06c59daa91',
         }
 
         req = urllib.request.Request(url,None,hdr)
@@ -138,6 +144,8 @@ class Products(object):
         data = json.loads(response)
 
         product_count = data['numberOfProducts']
+        if product_count > 5000:
+            product_count = 6000
         pages = {'productPages' : math.ceil(product_count / 48)}
 
         products = []

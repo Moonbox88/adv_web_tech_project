@@ -1,2 +1,2 @@
 #!/bin/sh
-pip install flask flask-wtf flask-sqlalchemy
+pip install flask flask-wtf flask-sqlalchemy geocoder

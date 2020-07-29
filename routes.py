@@ -7,6 +7,7 @@ import geocoder
 import configparser
 import logging
 import json
+from flask_wtf.csrf import CSRFProtect
 
 
 app = Flask(__name__)
@@ -14,7 +15,9 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///var/store.db'
 db.init_app(app)
 
-app.secret_key = app.config['SECRET_KEY']
+csrf = CSRFProtect(app)
+
+app.secret_key = "secret-key"
 
 @app.route("/")
 def index():
@@ -233,7 +236,6 @@ def init(app):
         config.read(config_location)
 
         app.config['DEBUG'] = config.get("config", "debug")
-        app.config['SECRET_KEY'] = config.get("config", "secret_key")
         app.config['LOG_FILE'] = config.get("logging", "name")
         app.config['LOG_LOCATION'] = config.get("logging", "location")
         app.config['LOG_LEVEL'] = config.get("logging", "level")

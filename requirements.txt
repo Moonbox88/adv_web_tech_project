@@ -9,6 +9,7 @@ Flask-WTF==0.14.2
 future==0.18.2
 geocoder==1.38.1
 idna==2.8
+gunicorn==20.0.4
 itsdangerous==1.1.0
 Jinja2==2.10.3
 MarkupSafe==1.1.1

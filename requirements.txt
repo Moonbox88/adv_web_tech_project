@@ -11,7 +11,7 @@ geocoder==1.38.1
 idna==2.8
 gunicorn==20.0.4
 itsdangerous==1.1.0
-Jinja2==2.10.3
+Jinja2==2.11.3
 MarkupSafe==1.1.1
 pyScss==1.3.5
 ratelim==0.1.6
